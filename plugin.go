@@ -48,6 +48,8 @@ type (
 		BackendConfig []string `json:"backend-config"`
 		Lock          *bool    `json:"lock"`
 		LockTimeout   string   `json:"lock-timeout"`
+		GetPlugins    *bool    `json:"get-plugins"`
+		PluginDir     string   `json:"plugin-dir"`
 	}
 
 	// FmtOptions fmt options for the Terraform's fmt command
@@ -222,6 +224,15 @@ func initCommand(config InitOptions) *exec.Cmd {
 	// "0s" is default in TF
 	if config.LockTimeout != "" {
 		args = append(args, fmt.Sprintf("-lock-timeout=%s", config.LockTimeout))
+	}
+
+	// True is default in TF
+	if config.GetPlugins != nil {
+		args = append(args, fmt.Sprintf("-get-plugins=%t", *config.GetPlugins))
+	}
+
+	if config.PluginDir != "" {
+		args = append(args, fmt.Sprintf("-plugin-dir=%s", config.PluginDir))
 	}
 
 	// Fail Terraform execution on prompt

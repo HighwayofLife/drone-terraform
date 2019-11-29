@@ -108,6 +108,16 @@ pipeline:
 +       - "region=us-east-1"
 ```
 
+Example using a plugin dir. This is useful if extending this plugin to your own image containing providers.
+```diff
+steps:
+  - name: terraform
+    image: deck15/drone-terraform
++   init_options:
++     plugin-dir: /path/to/plugin-dir
++     get-plugins: false
+```
+
 You may want to run terraform against internal resources, like an internal
 OpenStack deployment.  Sometimes these resources are signed by an internal
 CA Certificate.  You can inject your CA Certificate into the plugin by using
@@ -196,7 +206,7 @@ pipeline:
 +     check: true
 ```
 
-You may want to run some executions in parallel without having racing condition problems with the .terraform dir and 
+You may want to run some executions in parallel without having racing condition problems with the .terraform dir and
 plan's output file.
 
 ```diff
@@ -228,6 +238,12 @@ init_options.lock
 
 init_options.lock-timeout
 : Duration to wait for a state lock. Default `0s`.
+
+init_options.get-plugins
+: Download plugins if they don't exist locally. Default `true`.
+
+init_options.plugin-dir
+: Specify a local plugin directory to use or download Plugins.
 
 fmt_options
 : contains the configuration for the fmt action.
