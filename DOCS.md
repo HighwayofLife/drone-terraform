@@ -3,9 +3,9 @@ date: 2016-01-01T00:00:00+00:00
 title: Terraform
 author: jmccann
 tags: [ infrastructure, build tool ]
-repo: jmccann/drone-terraform
+repo: highwayoflife/drone-terraform
 logo: terraform.svg
-image: jmccann/drone-terraform
+image: deck15/drone-terraform
 ---
 
 The Terraform plugin applies the infrastructure configuration contained within the repository. The below pipeline configuration demonstrates simple usage which will run a `validate`, `plan` and `apply`:
@@ -13,7 +13,7 @@ The Terraform plugin applies the infrastructure configuration contained within t
 ```yaml
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 ```
 
 Example configuration passing `vars` to terraform commands:
@@ -21,7 +21,7 @@ Example configuration passing `vars` to terraform commands:
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   vars:
 +     app_name: my-project
 +     app_version: 1.0.0
@@ -32,7 +32,7 @@ Example of explicitly specifying `actions` to perform a dry run.
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   actions:
 +     - validate
 +     - plan
@@ -47,7 +47,7 @@ for more details.
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   secrets:
 +     - source: terraform_secret
 +       target: tf_var_my_secret
@@ -58,12 +58,12 @@ pipeline:
 ```diff
 pipeline:
   terraform_1:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   environment:
 +     TF_VAR_MY_SECRET: ${TERRAFORM_SECRET}
 
   terraform_2:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
     plan: false
 +   sensitive: true
 +   vars:
@@ -78,7 +78,7 @@ what command is actually being ran.
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   sensitive: true
 ```
 
@@ -89,8 +89,8 @@ specified instead of using the embedded version that is included.
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
-+   tf_version: 0.10.3
+    image: deck15/drone-terraform:v6.3
++   tf_version: 0.12.3
 ```
 
 Example configuration with state tracked via remote.  You will need a
@@ -100,7 +100,7 @@ specified in a `.tf` file.  You can then pass additional options via the `.drone
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   init_options:
 +     backend-config:
 +       - "bucket=my-terraform-config-bucket"
@@ -112,7 +112,7 @@ Example using a plugin dir. This is useful if extending this plugin to your own 
 ```diff
 steps:
   - name: terraform
-    image: deck15/drone-terraform
+    image: deck15/drone-terraform:v6.3
 +   init_options:
 +     plugin-dir: /path/to/plugin-dir
 +     get-plugins: false
@@ -126,7 +126,7 @@ CA Certificate.  You can inject your CA Certificate into the plugin by using
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   ca_cert: |
 +     -----BEGIN CERTIFICATE-----
 +     asdfsadf
@@ -143,7 +143,7 @@ See [the discussion](https://github.com/hashicorp/terraform/issues/1275) in the 
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   role_arn_to_assume: arn:aws:iam::account-of-role-to-assume:role/name-of-role
 ```
 
@@ -154,7 +154,7 @@ and you want to use different drone configurations to apply different environmen
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   root_dir: some/path/here
 ```
 
@@ -165,7 +165,7 @@ all resources will be planned/applied against as the default behavior.
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   targets:
 +     - aws_security_group.generic_sg
 +     - aws_security_group.app_sg
@@ -177,7 +177,7 @@ If you want to change Terraform's default parallelism (currently equal to 10) th
 ```diff
 pipeline:
   terraform:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   parallelism: 2
 ```
 
@@ -186,7 +186,7 @@ Destroying the service can be done by specifying `plan-destroy` and `destroy` ac
 ```diff
 pipeline:
   destroy:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   actions:
 +     - plan-destroy
 +     - destroy
@@ -197,7 +197,7 @@ Formatting the Terraform configuration files can be done by specifying the `fmt`
 ```diff
 pipeline:
   fmt:
-    image: jmccann/drone-terraform:5
+    image: deck15/drone-terraform:v6.3
 +   actions:
 +     - fmt
 +   fmt_options:
@@ -212,10 +212,10 @@ plan's output file.
 ```diff
 pipeline:
   backend-service:
-    image: jmccann/drone-terraform:<version>
+    image: deck15/drone-terraform:<version>
 +   tf_data_dir: .backend-service.terraform
   frontend-service:
-    image: jmccann/drone-terraform:<version>
+    image: deck15/drone-terraform:<version>
 +   tf_data_dir: .frontend-service.terraform
 ```
 
